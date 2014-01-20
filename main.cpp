@@ -58,7 +58,8 @@ int main()
     sf::Text scoreText;
     scoreText.setFont(font);
     scoreText.setColor(sf::Color::White);
-    scoreText.setPosition(windowW / 2 - scoreText.getLocalBounds().width / 2, windowH / 6);
+    // haven't seemed to figure out sfml's text rendering stuff yet...
+    scoreText.setPosition(windowW / 8h, windowH / 16);
 
     // LET'S PLAY! ------------------------------------------------------------
 	// start the game loop
@@ -73,6 +74,8 @@ int main()
         // process realtime inputs
         processInput(lPaddle, paddleDY, sf::Keyboard::isKeyPressed(sf::Keyboard::Tab), sf::Keyboard::isKeyPressed(sf::Keyboard::LShift), windowH, paddleH);
         processInput(rPaddle, paddleDY, sf::Keyboard::isKeyPressed(sf::Keyboard::BackSlash), sf::Keyboard::isKeyPressed(sf::Keyboard::RShift), windowH, paddleH);
+
+
 
         // process events
         sf::Event event;

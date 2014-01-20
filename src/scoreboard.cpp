@@ -24,8 +24,9 @@ void scoreboard::bumpRScore()
 
 std::string scoreboard::printScoreBoard()
 {
-    std::string printMe = "Left Player: " + std::to_string(this->lScore);
-    printMe += "Right Player: " + std::to_string(this->rScore);
-    printMe += "Points to Win: " + std::to_string(this->WIN_REQ);
+    std::string printMe = "";
+    printMe += "Left Player  : " + std::to_string(this->lScore) + " | ";
+    printMe += "Right Player : " + std::to_string(this->rScore) + " | ";
+    printMe += "Points to Win: " + std::to_string(this->WIN_REQ) + "\n";
     return printMe;
 }
