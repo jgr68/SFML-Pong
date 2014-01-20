@@ -16,6 +16,8 @@ void processInput(sf::RectangleShape&, int, bool, bool, int, int);
 void setBallVel(int&, int&, int, int);
 void moveBall(sf::RectangleShape&, int&, int&, int, int, sf::RectangleShape, sf::RectangleShape, scoreboard&);
 
+// ABANDON ALL HOPE, YE WHO ENTER HERE . . . 
+
 int main()
 {
     // SET UP! ----------------------------------------------------------------
