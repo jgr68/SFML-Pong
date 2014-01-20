@@ -30,3 +30,21 @@ std::string scoreboard::printScoreBoard()
     printMe += "Points to Win: " + std::to_string(this->WIN_REQ) + "\n";
     return printMe;
 }
+
+bool scoreboard::getLWin()
+{
+    return this->lWin;
+}
+
+bool scoreboard::getRWin()
+{
+    return this->rWin;
+}
+
+void scoreboard::reset()
+{
+    this->rWin = false;
+    this->lWin = false;
+    this->lScore = 0;
+    this->rScore = 0;
+}

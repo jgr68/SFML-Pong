@@ -10,6 +10,9 @@ class scoreboard
         std::string printScoreBoard();
         void bumpLScore();
         void bumpRScore();
+        bool getLWin();
+        bool getRWin();
+        void reset();
     private:
         int lScore;
         int rScore;

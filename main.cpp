@@ -7,7 +7,7 @@
 #include "scoreboard.h"
 
 #define TITLEBAR "SFML-Pong!"
-#define PTS_2_WIN 10
+#define PTS_2_WIN 1
 #define FONT_PATH "resources/DejaVuSans.ttf"
 
 
@@ -59,15 +59,12 @@ int main()
     scoreText.setFont(font);
     scoreText.setColor(sf::Color::White);
     // haven't seemed to figure out sfml's text rendering stuff yet...
-    scoreText.setPosition(windowW / 8h, windowH / 16);
+    scoreText.setPosition(windowW / 8, windowH / 16);
 
     // LET'S PLAY! ------------------------------------------------------------
 	// start the game loop
     while (app.isOpen())
     {
-        // update the score board
-        scoreText.setString(mySB.printScoreBoard());
-
         // move the ball
         moveBall(ball, dx, dy, windowH, windowW, lPaddle, rPaddle, mySB);
 
@@ -91,11 +88,53 @@ int main()
         // clear the screen
         app.clear();
 
+        bool on = true;
+        // loop
+        while (mySB.getLWin() || mySB.getRWin())
+        {
+            if (mySB.getLWin() && on)
+                scoreText.setString("Left Player wins! \n Press enter to play again, or escape to quit.");
+            if (mySB.getRWin() && on)
+                scoreText.setString("Right Player wins! \n Press enter to play again, or escape to quit.");
+
+            on = false;
+
+            app.draw(scoreText);
+            app.display();
+
+            // process events
+            sf::Event event;
+            while (app.pollEvent(event))
+            {
+                // handle events
+                if (event.type == sf::Event::Closed)
+                    app.close();
+                else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+                    app.close();
+                else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return)
+                {
+                    mySB.reset();
+                    lPaddle.setPosition(0, windowH / 2 - paddleH / 2);
+                    rPaddle.setPosition(windowW - paddleW, windowH / 2 - paddleH / 2);
+                    setBallVel(dx, dy, windowH, windowW);
+                    ball.setPosition(windowW / 2 - paddleW / 2, windowH / 2 - paddleW / 2);
+                    dx = dy = 0;
+                    setBallVel(dx, dy, windowH, windowW);
+                    break;
+                }
+
+            }
+        }
+
+        // update the score board
+        scoreText.setString(mySB.printScoreBoard());
+
         // draw all entities
         app.draw(ball);
         app.draw(lPaddle);
         app.draw(rPaddle);
         app.draw(scoreText);
+
 
         // update the window
         app.display();
