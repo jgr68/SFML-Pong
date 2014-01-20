@@ -2,13 +2,15 @@
 #include <vector>
 #include <iostream>
 #include <time.h>
+#include <cstdlib>
+#include <stdio.h>
 
 // screen attributes
 #define TITLEBAR "SFML window"
 
 // prototypes
 void processInput(sf::RectangleShape&, int, bool, bool, int, int);
-void setBallVel(int, int&, int, int);
+void setBallVel(int&, int&, int, int);
 
 int main()
 {
@@ -22,16 +24,11 @@ int main()
     unsigned int paddleW = windowW / 38;
     int paddleDY = 6;
 
-    // use the paddle dimensions to insantiate the ball
-    sf::Rectangle ball(sf::Vector2f(paddleW / 2, paddleW / 2));
-    ball.setPosition(screenH / 2 - paddleW / 2, screenW / 2 - paddleW / 2);
-    int
-    do {
-        while (ballD)
-    }
-    int ballDY = screenH / ;
-
-    int ballDX = screenW / 12 * ;
+    // use the paddle dimensions to instantiate the ball
+    sf::RectangleShape ball(sf::Vector2f(paddleW / 2, paddleW / 2));
+    ball.setPosition(windowH / 2 - paddleW / 2, windowW / 2 - paddleW / 2);
+    int dx, dy;
+    setBallVel(dx, dy, windowH, windowW);
 
     // instantiate main window
     sf::RenderWindow app(sf::VideoMode(windowW, windowH), TITLEBAR, sf::Style::Titlebar);
@@ -96,11 +93,12 @@ void processInput(sf::RectangleShape& paddle, int dy, bool goUp, bool goDown, in
 
 void setBallVel(int& dx, int& dy, int windowH, int windowW)
 {
+    srand(time(NULL));
     do {
-        dx = windowW / 12 * sf::Randomizer::Random(-1,1);
+        dx = windowW / 12 * (rand() % 2 - 1);
     } while(dx == 0);
 
     do {
-        dy = windowY / 12 * sf::Randomizer::Random(-1,1);
+        dy = windowH / 12 * (rand() % 2 - 1);
     } while(dy == 0);
 }
