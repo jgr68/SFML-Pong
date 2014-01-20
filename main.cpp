@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 // screen attributes
-#define TITLEBAR "SFML window"
+#define TITLEBAR "SFML-Pong!"
 
 // prototypes
 void processInput(sf::RectangleShape&, int, bool, bool, int, int);
@@ -26,7 +26,7 @@ int main()
 
     // use the paddle dimensions to instantiate the ball
     sf::RectangleShape ball(sf::Vector2f(paddleW / 2, paddleW / 2));
-    ball.setPosition(windowH / 2 - paddleW / 2, windowW / 2 - paddleW / 2);
+    ball.setPosition(windowW / 2 - paddleW / 2, windowH / 2 - paddleW / 2);
     int dx, dy;
     setBallVel(dx, dy, windowH, windowW);
 
