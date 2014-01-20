@@ -7,16 +7,15 @@
 #include "scoreboard.h"
 
 #define TITLEBAR "SFML-Pong!"
-#define PTS_2_WIN 1
+#define PTS_2_WIN 10
 #define FONT_PATH "resources/DejaVuSans.ttf"
 
+// ABANDON ALL HOPE, YE WHO ENTER HERE . . .
 
 // prototypes
 void processInput(sf::RectangleShape&, int, bool, bool, int, int);
 void setBallVel(int&, int&, int, int);
 void moveBall(sf::RectangleShape&, int&, int&, int, int, sf::RectangleShape, sf::RectangleShape, scoreboard&);
-
-// ABANDON ALL HOPE, YE WHO ENTER HERE . . . 
 
 int main()
 {
@@ -190,7 +189,6 @@ void moveBall(sf::RectangleShape& ball, int& dx, int& dy, int winH, int winW, sf
         mySB.bumpLScore();
         ball.setPosition(winW / 2, winH / 2);
     }
-
     // COLLISION DETECTION
     if (dx < 0 && ball.getGlobalBounds().intersects(lPaddle.getGlobalBounds()))
         dx *= -1;
