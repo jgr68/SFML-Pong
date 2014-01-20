@@ -11,7 +11,7 @@
 // prototypes
 void processInput(sf::RectangleShape&, int, bool, bool, int, int);
 void setBallVel(int&, int&, int, int);
-void moveBall(sf::RectangleShape&, int&, int&, int, int);
+void moveBall(sf::RectangleShape&, int&, int&, int, int, sf::RectangleShape, sf::RectangleShape);
 
 int main()
 {
@@ -23,7 +23,7 @@ int main()
     // use the window size to determine the paddle dimensions and velocity
     unsigned int paddleH = windowH / 5;
     unsigned int paddleW = windowW / 38;
-    int paddleDY = 6;
+    int paddleDY = windowH / 42;
 
     // use the paddle dimensions to instantiate the ball
     sf::RectangleShape ball(sf::Vector2f(paddleW / 2, paddleW / 2));
@@ -46,7 +46,7 @@ int main()
     while (app.isOpen())
     {
         // move the ball
-        moveBall(ball, dx, dy, windowH, windowW);
+        moveBall(ball, dx, dy, windowH, windowW, lPaddle, rPaddle);
 
         // process realtime inputs
         processInput(lPaddle, paddleDY, sf::Keyboard::isKeyPressed(sf::Keyboard::Tab), sf::Keyboard::isKeyPressed(sf::Keyboard::LShift), windowH, paddleH);
@@ -101,7 +101,7 @@ void setBallVel(int& dx, int& dy, int windowH, int windowW)
 {
     srand(time(NULL));
     do {
-        dx = windowW / 72 * (rand() % 2 - 1);
+        dx = windowW / 102 * (rand() % 2 - 1);
     } while(dx == 0);
 
     do {
@@ -109,15 +109,21 @@ void setBallVel(int& dx, int& dy, int windowH, int windowW)
     } while(dy == 0);
 }
 
-void moveBall(sf::RectangleShape& ball, int& dx, int& dy, int winH, int winW)
+void moveBall(sf::RectangleShape& ball, int& dx, int& dy, int winH, int winW, sf::RectangleShape lPaddle, sf::RectangleShape rPaddle)
 {
     // COLLISION DETECTION
-    // temporary ... remove after calibrating ball velocity
-    if (dx < 0 && ball.getPosition().x + dx < 0)
-        dx *= -1;
-    if (dx > 0 && ball.getPosition().x + ball.getSize().x + dx > winW)
+    if (dx < 0 && ball.getGlobalBounds().intersects(lPaddle.getGlobalBounds()))
         dx *= -1;
 
+    if (dx > 0 && ball.getGlobalBounds().intersects(rPaddle.getGlobalBounds()))
+        dx *= -1;
+/*    // temporary ... remove after calibrating ball velocity
+    if (dx < 0 && ball.getPosition().x + dx < 0)
+        dx *= -1;
+
+    if (dx > 0 && ball.getPosition().x + ball.getSize().x + dx > winW)
+        dx *= -1;
+*/
     // make ball bounce off of horizontal walls
     if (dy < 0 && ball.getPosition().y + dy < 0)
         dy *= -1;
