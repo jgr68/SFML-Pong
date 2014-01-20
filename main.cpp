@@ -7,6 +7,7 @@
 
 // screen attributes
 #define TITLEBAR "SFML-Pong!"
+#define PTS_2_WIN 10
 
 // prototypes
 void processInput(sf::RectangleShape&, int, bool, bool, int, int);
@@ -16,6 +17,7 @@ void moveBall(sf::RectangleShape&, int&, int&, int, int, sf::RectangleShape, sf:
 int main()
 {
     // SET UP! ----------------------------------------------------------------
+
     // determine the window dimensions based on the screen resolution
     unsigned int windowH = sf::VideoMode::getDesktopMode().height * 2 / 3;
     unsigned int windowW = sf::VideoMode::getDesktopMode().width * 2 / 3;
@@ -40,6 +42,9 @@ int main()
     sf::RectangleShape rPaddle(sf::Vector2f(paddleW, paddleH));
     lPaddle.setPosition(0, windowH / 2 - paddleH / 2);
     rPaddle.setPosition(windowW - paddleW, windowH / 2 - paddleH / 2);
+
+    // make a scoreboard
+    scoreboard mySB(PTS_2_WIN);
 
     // LET'S PLAY! ------------------------------------------------------------
 	// start the game loop
@@ -101,29 +106,35 @@ void setBallVel(int& dx, int& dy, int windowH, int windowW)
 {
     srand(time(NULL));
     do {
-        dx = windowW / 102 * (rand() % 2 - 1);
+        dx = windowW / 202 * (rand() % 2 - 1);
     } while(dx == 0);
 
     do {
-        dy = windowH / 72 * (rand() % 2 - 1);
+        dy = windowH / 144 * (rand() % 2 - 1);
     } while(dy == 0);
 }
 
-void moveBall(sf::RectangleShape& ball, int& dx, int& dy, int winH, int winW, sf::RectangleShape lPaddle, sf::RectangleShape rPaddle)
+void moveBall(sf::RectangleShape& ball, int& dx, int& dy, int winH, int winW, sf::RectangleShape lPaddle, sf::RectangleShape rPaddle, scoreboard mySB)
 {
+    if (dx < 0 && ball.getPosition().x < 0)
+    {
+        mySB.bumpRScore();
+        ball.setPosition(windowW / 2 - paddleW / 2, windowH / 2 - paddleW / 2);
+    }
+
+    if (dy > 0 && ball.getPosition().x + ball.getSize().x + dx > winW)
+    {
+        mySB.bumpLScore();
+        ball.setPosition(windowW / 2 - paddleW / 2, windowH / 2 - paddleW / 2);
+    }
+
     // COLLISION DETECTION
     if (dx < 0 && ball.getGlobalBounds().intersects(lPaddle.getGlobalBounds()))
         dx *= -1;
 
     if (dx > 0 && ball.getGlobalBounds().intersects(rPaddle.getGlobalBounds()))
         dx *= -1;
-/*    // temporary ... remove after calibrating ball velocity
-    if (dx < 0 && ball.getPosition().x + dx < 0)
-        dx *= -1;
 
-    if (dx > 0 && ball.getPosition().x + ball.getSize().x + dx > winW)
-        dx *= -1;
-*/
     // make ball bounce off of horizontal walls
     if (dy < 0 && ball.getPosition().y + dy < 0)
         dy *= -1;
