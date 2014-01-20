@@ -1,6 +1,9 @@
 # depslib dependency file v1.0
-1390189333 source:/home/epicwinrarftw/Projects/Pong/main.cpp
+1390197016 source:/home/epicwinrarftw/Projects/Pong/main.cpp
 	<SFML/Graphics.hpp>
 	<vector>
 	<iostream>
+	<time.h>
+	<cstdlib>
+	<stdio.h>
 

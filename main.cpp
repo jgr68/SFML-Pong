@@ -11,6 +11,7 @@
 // prototypes
 void processInput(sf::RectangleShape&, int, bool, bool, int, int);
 void setBallVel(int&, int&, int, int);
+void moveBall(sf::RectangleShape&, int&, int&, int, int);
 
 int main()
 {
@@ -28,6 +29,7 @@ int main()
     sf::RectangleShape ball(sf::Vector2f(paddleW / 2, paddleW / 2));
     ball.setPosition(windowW / 2 - paddleW / 2, windowH / 2 - paddleW / 2);
     int dx, dy;
+    dx = dy = 0;
     setBallVel(dx, dy, windowH, windowW);
 
     // instantiate main window
@@ -43,6 +45,10 @@ int main()
 	// start the game loop
     while (app.isOpen())
     {
+        // move the ball
+        moveBall(ball, dx, dy, windowH, windowW);
+
+        // process realtime inputs
         processInput(lPaddle, paddleDY, sf::Keyboard::isKeyPressed(sf::Keyboard::Tab), sf::Keyboard::isKeyPressed(sf::Keyboard::LShift), windowH, paddleH);
         processInput(rPaddle, paddleDY, sf::Keyboard::isKeyPressed(sf::Keyboard::BackSlash), sf::Keyboard::isKeyPressed(sf::Keyboard::RShift), windowH, paddleH);
 
@@ -95,10 +101,29 @@ void setBallVel(int& dx, int& dy, int windowH, int windowW)
 {
     srand(time(NULL));
     do {
-        dx = windowW / 12 * (rand() % 2 - 1);
+        dx = windowW / 72 * (rand() % 2 - 1);
     } while(dx == 0);
 
     do {
-        dy = windowH / 12 * (rand() % 2 - 1);
+        dy = windowH / 72 * (rand() % 2 - 1);
     } while(dy == 0);
+}
+
+void moveBall(sf::RectangleShape& ball, int& dx, int& dy, int winH, int winW)
+{
+    // COLLISION DETECTION
+    // temporary ... remove after calibrating ball velocity
+    if (dx < 0 && ball.getPosition().x + dx < 0)
+        dx *= -1;
+    if (dx > 0 && ball.getPosition().x + ball.getSize().x + dx > winW)
+        dx *= -1;
+
+    // make ball bounce off of horizontal walls
+    if (dy < 0 && ball.getPosition().y + dy < 0)
+        dy *= -1;
+    if (dy > 0 && ball.getPosition().y + ball.getSize().y + dy > winH)
+        dy *= -1;
+
+    // move the ball
+    ball.move(dx, dy);
 }
