@@ -4,15 +4,17 @@
 #include <time.h>
 #include <cstdlib>
 #include <stdio.h>
+#include "scoreboard.h"
 
-// screen attributes
 #define TITLEBAR "SFML-Pong!"
 #define PTS_2_WIN 10
+#define FONT_PATH "resources/DejaVuSans.ttf"
+
 
 // prototypes
 void processInput(sf::RectangleShape&, int, bool, bool, int, int);
 void setBallVel(int&, int&, int, int);
-void moveBall(sf::RectangleShape&, int&, int&, int, int, sf::RectangleShape, sf::RectangleShape);
+void moveBall(sf::RectangleShape&, int&, int&, int, int, sf::RectangleShape, sf::RectangleShape, scoreboard&);
 
 int main()
 {
@@ -43,15 +45,30 @@ int main()
     lPaddle.setPosition(0, windowH / 2 - paddleH / 2);
     rPaddle.setPosition(windowW - paddleW, windowH / 2 - paddleH / 2);
 
+    // load font
+    sf::Font font;
+    if (!font.loadFromFile(FONT_PATH))
+    {
+        std::cerr << "Unable to load font. Exiting." << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
     // make a scoreboard
     scoreboard mySB(PTS_2_WIN);
+    sf::Text scoreText;
+    scoreText.setFont(font);
+    scoreText.setColor(sf::Color::White);
+    scoreText.setPosition(windowW / 2 - scoreText.getLocalBounds().width / 2, windowH / 6);
 
     // LET'S PLAY! ------------------------------------------------------------
 	// start the game loop
     while (app.isOpen())
     {
+        // update the score board
+        scoreText.setString(mySB.printScoreBoard());
+
         // move the ball
-        moveBall(ball, dx, dy, windowH, windowW, lPaddle, rPaddle);
+        moveBall(ball, dx, dy, windowH, windowW, lPaddle, rPaddle, mySB);
 
         // process realtime inputs
         processInput(lPaddle, paddleDY, sf::Keyboard::isKeyPressed(sf::Keyboard::Tab), sf::Keyboard::isKeyPressed(sf::Keyboard::LShift), windowH, paddleH);
@@ -75,6 +92,8 @@ int main()
         app.draw(ball);
         app.draw(lPaddle);
         app.draw(rPaddle);
+        app.draw(scoreText);
+
         // update the window
         app.display();
     }
@@ -114,18 +133,18 @@ void setBallVel(int& dx, int& dy, int windowH, int windowW)
     } while(dy == 0);
 }
 
-void moveBall(sf::RectangleShape& ball, int& dx, int& dy, int winH, int winW, sf::RectangleShape lPaddle, sf::RectangleShape rPaddle, scoreboard mySB)
+void moveBall(sf::RectangleShape& ball, int& dx, int& dy, int winH, int winW, sf::RectangleShape lPaddle, sf::RectangleShape rPaddle, scoreboard& mySB)
 {
     if (dx < 0 && ball.getPosition().x < 0)
     {
         mySB.bumpRScore();
-        ball.setPosition(windowW / 2 - paddleW / 2, windowH / 2 - paddleW / 2);
+        ball.setPosition(winW / 2, winH / 2);
     }
 
     if (dy > 0 && ball.getPosition().x + ball.getSize().x + dx > winW)
     {
         mySB.bumpLScore();
-        ball.setPosition(windowW / 2 - paddleW / 2, windowH / 2 - paddleW / 2);
+        ball.setPosition(winW / 2, winH / 2);
     }
 
     // COLLISION DETECTION

@@ -1,9 +1,16 @@
 # depslib dependency file v1.0
-1390198605 source:/home/epicwinrarftw/Projects/Pong/main.cpp
+1390203257 source:/home/epicwinrarftw/Projects/Pong/main.cpp
 	<SFML/Graphics.hpp>
 	<vector>
 	<iostream>
 	<time.h>
 	<cstdlib>
 	<stdio.h>
+	"scoreboard.h"
+
+1390203037 source:/home/epicwinrarftw/Projects/Pong/src/scoreboard.cpp
+	"scoreboard.h"
+
+1390200102 /home/epicwinrarftw/Projects/Pong/include/scoreboard.h
+	<string>
 
